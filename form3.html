@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Validasi</title>
+
+    <link
+      rel="stylesheet"
+      href="assets/vendor/bootstrap-5.2.3-dist/css/bootstrap.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="mx-auto mt-3" style="max-width: 400px">
+      <h1 class="text-center mb-0">Form Validasi</h1>
+      <h3 class="text-center text-muted">Validasi secara Realtime</h3>
+
+      <div class="card">
+        <div class="card-body">
+          <form
+            id="myForm"
+            class="needs-validation"
+            onsubmit="return validateForm()"
+          >
+            <div class="mb-3">
+              <label class="form-label" for="inputUsername">Username</label>
+              <input
+                oninput="validateUsername(this)"
+                class="form-control"
+                type="text"
+                id="inputUsername"
+                name="username"
+                autocomplete="username"
+              />
+              <div class="invalid-feedback" id="usernameErr"></div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="inputPassword">Password</label>
+              <input
+                oninput="validatePassword(this)"
+                class="form-control"
+                type="password"
+                id="inputPassword"
+                name="password"
+                autocomplete="current-password"
+              />
+              <ul id="passwordInfo" class="ms-1 list-unstyled">
+                <li>
+                  <span class="text-danger">
+                    &#10005; panjang minimal 8 karakter
+                  </span>
+                </li>
+                <li>
+                  <span class="text-danger">
+                    &#10005; terdapat huruf kapital
+                  </span>
+                </li>
+                <li>
+                  <span class="text-danger">
+                    &#10005; terdapat huruf kecil
+                  </span>
+                </li>
+                <li>
+                  <span class="text-danger"> &#10005; terdapat angka </span>
+                </li>
+                <li>
+                  <span class="text-danger">
+                    &#10005; terdapat karakter spesial
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="mb-3 text-end">
+              <input class="btn btn-primary" type="submit" value="Submit" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function validateUsername(targetElmnt) {
+        let status = true;
+        const elmntErr = document.getElementById("usernameErr");
+        elmntErr.innerHTML = "";
+
+        if (targetElmnt.value.trim() === "") {
+          elmntErr.innerHTML = "Username tidak boleh kosong!";
+          status = false;
+        } else if (targetElmnt.value.length != 8) {
+          elmntErr.innerHTML = "Panjang username harus 8 karakter!";
+          status = false;
+        } else {
+          // example: ifs18005
+          const usernamePattern = /(ifs[1-9][0-9]{4})$/gm;
+
+          if (!usernamePattern.test(targetElmnt.value)) {
+            elmntErr.innerHTML =
+              "Format username tidak mewakili prodi informatika.";
+            status = false;
+          } else if (
+            targetElmnt.value.slice(3, 5) >
+            new Date().getFullYear().toString().slice(2, 4)
+          ) {
+            elmntErr.innerHTML = "Username dengan angkatan ini belum tersedia.";
+            status = false;
+          }
+        }
+
+        if (status) {
+          targetElmnt.classList.add("is-valid");
+          targetElmnt.classList.remove("is-invalid");
+        } else {
+          targetElmnt.classList.add("is-invalid");
+          targetElmnt.classList.remove("is-valid");
+        }
+
+        return status;
+      }
+
+      function validatePassword(targetElmnt) {
+        let status = true;
+        const elmntPasswordInfo = document.getElementById("passwordInfo");
+        const listItems = elmntPasswordInfo.querySelectorAll("li");
+
+        if (targetElmnt.value.length < 8) {
+          listItems[0].innerHTML = `<span class="text-danger">
+ &#10005; panjang minimal 8 karakter
+ </span>`;
+          status = false;
+        } else {
+          listItems[0].innerHTML = `<span class="text-success">
+ &#10003; panjang minimal 8 karakter
+ </span>`;
+        }
+
+        if (!/[A-Z]/.test(targetElmnt.value)) {
+          listItems[1].innerHTML = `<span class="text-danger">
+ &#10005; terdapat huruf kapital
+ </span>`;
+          status = false;
+        } else {
+          listItems[1].innerHTML = `<span class="text-success">
+ &#10003; terdapat huruf kapital
+ </span>`;
+        }
+
+        if (!/[a-z]/.test(targetElmnt.value)) {
+          listItems[2].innerHTML = `<span class="text-danger">
+ &#10005; terdapat huruf kecil
+ </span>`;
+          status = false;
+        } else {
+          listItems[2].innerHTML = `<span class="text-success">
+ &#10003; terdapat huruf kecil
+ </span>`;
+        }
+
+        if (!/[0-9]/.test(targetElmnt.value)) {
+          listItems[3].innerHTML = `<span class="text-danger">
+ &#10005; terdapat angka
+ </span>`;
+          status = false;
+        } else {
+          listItems[3].innerHTML = `<span class="text-success">
+ &#10003; terdapat angka
+ </span>`;
+        }
+
+        if (!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/.test(targetElmnt.value)) {
+          listItems[4].innerHTML = `<span class="text-danger">
+ &#10005; terdapat karakter spesial
+ </span>`;
+          status = false;
+        } else {
+          listItems[4].innerHTML = `<span class="text-success">
+ &#10003; terdapat karakter spesial
+ </span>`;
+        }
+
+        if (status) {
+          targetElmnt.classList.add("is-valid");
+          targetElmnt.classList.remove("is-invalid");
+        } else {
+          targetElmnt.classList.add("is-invalid");
+          targetElmnt.classList.remove("is-valid");
+        }
+
+        return status;
+      }
+
+      function validateForm() {
+        const elmntUsername = document.getElementById("inputUsername");
+        const elmntPassword = document.getElementById("inputPassword");
+
+        return (
+          validateUsername(elmntUsername) && validatePassword(elmntPassword)
+        );
+      }
+    </script>
+  </body>
+</html>

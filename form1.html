@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Validasi</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1,
+      h3 {
+        text-align: center;
+      }
+
+      h1 {
+        margin-bottom: 0;
+      }
+
+      h3 {
+        margin-top: 0;
+        color: #808080;
+      }
+
+      form {
+        max-width: 400px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      input[type="text"],
+      input[type="email"] {
+        width: calc(100% - 20px);
+      }
+
+      select {
+        width: 100%;
+      }
+
+      .error {
+        color: red;
+      }
+
+      input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+
+      .mb-15 {
+        margin-bottom: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Form Validasi</h1>
+    <h3>Validasi setelah menekan tombol Submit</h3>
+    <form id="myForm" onsubmit="return validateForm()">
+      <div class="mb-15">
+        <label for="nama">Nama:</label>
+        <input type="text" id="nama" name="nama" />
+        <span id="namaError" class="error"></span>
+      </div>
+
+      <div class="mb-15">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" />
+        <span id="emailError" class="error"></span>
+      </div>
+
+      <div class="mb-15">
+        <label for="role">Role:</label>
+        <select id="role" name="role">
+          <option value="">~Pilih Role~</option>
+          <option>Pengajar</option>
+          <option>Pelajar</option>
+        </select>
+        <span id="roleError" class="error"></span>
+      </div>
+
+      <div class="mb-15">
+        <input type="submit" value="Submit" />
+      </div>
+    </form>
+
+    <script>
+      function validateForm() {
+        let status = true;
+
+        var nama = document.getElementById("nama").value.trim();
+        var email = document.getElementById("email").value.trim();
+        var role = document.getElementById("role").value.trim();
+
+        var namaError = document.getElementById("namaError");
+        var emailError = document.getElementById("emailError");
+        var roleError = document.getElementById("roleError");
+
+        namaError.innerHTML = "";
+        emailError.innerHTML = "";
+        roleError.innerHTML = "";
+
+        if (nama === "") {
+          namaError.innerHTML = "Nama harus diisi!";
+          status = false;
+        } else if (nama.length < 8) {
+          namaError.innerHTML = "Panjang nama minimal 8 karakter!";
+          status = false;
+        } else {
+          const regex = /^[A-Za-z\s]*$/;
+          if (!regex.test(nama)) {
+            namaError.innerHTML =
+              "Nama hanya boleh terdiri dari huruf alfabet dan spasi!";
+            status = false;
+          }
+        }
+
+        if (email === "") {
+          emailError.innerHTML = "Email harus diisi!";
+          status = false;
+        } else {
+          const emailPattern =
+            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+          if (!emailPattern.test(email)) {
+            emailError.innerHTML = "Format email tidak valid!";
+            status = false;
+          }
+        }
+
+        if (role === "") {
+          roleError.innerHTML = "Role harus dipilih!";
+          status = false;
+        }
+
+        return status;
+      }
+    </script>
+  </body>
+</html>

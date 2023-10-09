@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Validasi</title>
+
+    <link
+      rel="stylesheet"
+      href="assets/vendor/bootstrap-5.2.3-dist/css/bootstrap.min.css"
+    />
+  </head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1,
+    h3 {
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 0;
+    }
+
+    h3 {
+      margin-top: 0;
+      color: #808080;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .error {
+      color: red;
+    }
+
+    input[type="submit"] {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    .mb-15 {
+      margin-bottom: 15px;
+    }
+  </style>
+
+  <body>
+    <div class="mx-auto mt-3" style="max-width: 400px">
+      <h1 class="text-center mb-0">Form Validasi</h1>
+      <h3 class="text-center text-muted">Validasi dengan Toggle Class</h3>
+
+      <div class="card">
+        <div class="card-body">
+          <form
+            id="myForm"
+            class="needs-validation"
+            onsubmit="return validateForm()"
+          >
+            <div class="mb-3">
+              <label class="form-label" for="nama">Nama</label>
+              <input class="form-control" type="text" id="nama" name="nama" />
+              <div class="invalid-feedback" id="namaError">Error</div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="email">Email</label>
+              <input
+                class="form-control"
+                type="email"
+                id="email"
+                name="email"
+              />
+              <div class="invalid-feedback" id="emailError">Error</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="role">Role</label>
+              <select class="form-select" id="role" name="role">
+                <option value="">~Pilih Role~</option>
+                <option>Pengajar</option>
+                <option>Pelajar</option>
+              </select>
+              <div class="invalid-feedback" id="roleError">Error</div>
+            </div>
+
+            <div class="mb-3 text-end">
+              <input class="btn btn-primary" type="submit" value="Submit" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function validateForm() {
+        let status = {
+          nama: true,
+          email: true,
+          role: true,
+        };
+
+        let elmntNama = document.getElementById("nama");
+        let elmntEmail = document.getElementById("email");
+        let elmntRole = document.getElementById("role");
+
+        elmntNama.classList.remove("is-invalid");
+        elmntEmail.classList.remove("is-invalid");
+        elmntRole.classList.remove("is-invalid");
+
+        var nama = elmntNama.value.trim();
+        var email = elmntEmail.value.trim();
+        var role = elmntRole.value.trim();
+
+        var namaError = document.getElementById("namaError");
+        var emailError = document.getElementById("emailError");
+        var roleError = document.getElementById("roleError");
+
+        namaError.innerHTML = "";
+        emailError.innerHTML = "";
+        roleError.innerHTML = "";
+
+        if (nama === "") {
+          namaError.innerHTML = "Nama harus diisi!";
+          status.nama = false;
+        } else if (nama.length < 8) {
+          namaError.innerHTML = "Panjang nama minimal 8 karakter!";
+          status.nama = false;
+        } else {
+          const regex = /^[A-Za-z\s]*$/;
+          if (!regex.test(nama)) {
+            namaError.innerHTML =
+              "Nama hanya boleh terdiri dari huruf alfabet dan spasi!";
+            status.nama = false;
+          }
+        }
+
+        if (email === "") {
+          emailError.innerHTML = "Email harus diisi!";
+          status.email = false;
+        } else {
+          const emailPattern =
+            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+          if (!emailPattern.test(email)) {
+            emailError.innerHTML = "Format email tidak valid!";
+            status.email = false;
+          }
+        }
+
+        if (role === "") {
+          roleError.innerHTML = "Role harus dipilih!";
+          status.role = false;
+        }
+
+        if (!status.nama) {
+          elmntNama.classList.add("is-invalid");
+        }
+
+        if (!status.email) {
+          elmntEmail.classList.add("is-invalid");
+        }
+
+        if (!status.role) {
+          elmntRole.classList.add("is-invalid");
+        }
+
+        console.log(status);
+        return status.nama && status.email && status.role;
+      }
+    </script>
+  </body>
+</html>
